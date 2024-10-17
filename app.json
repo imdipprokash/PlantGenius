@@ -1,4 +1,22 @@
 {
   "name": "PLANTGENIUS",
-  "displayName": "PLANTGENIUS"
+  "displayName": "PLANTGENIUS",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3346761957556908~1718055864"
+  },
+  "plugins": [
+    [
+      "react-native-fbsdk-next",
+      {
+        "appID": "1103641798104377",
+        "clientToken": "c5078631e4065b60d7544a95xxxxxxxx",
+        "displayName": "PLANTGENIUS",
+        "advertiserIDCollectionEnabled": false,
+        "autoLogAppEventsEnabled": false,
+        "isAutoInitEnabled": true,
+        "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+      }
+    ],
+    "react-native-fbads"
+  ]
 }
