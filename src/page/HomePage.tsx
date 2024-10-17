@@ -32,7 +32,6 @@ const HomePage = (props: Props) => {
       const cleanedString = text.replace(/```json|```/g, '').trim();
       try {
         const jsonObject = JSON.parse(cleanedString);
-        console.log(jsonObject);
         setImageInfo(jsonObject);
         setLoading(false);
       } catch (error) {
@@ -64,12 +63,15 @@ const HomePage = (props: Props) => {
         cameraType: 'back',
         mediaType: 'photo',
       });
-      console.log(result);
+      if (result.assets?.length) {
+        setImage(result.assets[0]);
+        GetPlantInfoHandler(result.assets[0]);
+        setLoading(true);
+      }
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -104,10 +106,10 @@ const HomePage = (props: Props) => {
               //@ts-ignore
               uri: image?.uri,
             }}
-            resizeMode="contain"
+            resizeMode="cover"
             style={{
-              width: ScreenWidth * 0.6,
-              height: ScreenHeight * 0.4,
+              width: 400, //image?.width * 0.6 ||
+              height: 400, //image?.heigh * 0.4 ||
 
               borderRadius: 20,
               alignSelf: 'center',
