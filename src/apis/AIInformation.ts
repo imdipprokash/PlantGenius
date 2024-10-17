@@ -16,11 +16,15 @@ export const GetInformationFormImage = async (file: any) => {
     redirect: 'follow',
   };
 
-  //@ts-ignore
-
-  return await fetch('https://jdxpvt.netlify.app/api/ai', requestOptions)
+  const result = await fetch(
+    'https://jdxpvt.netlify.app/api/ai',
+    //@ts-ignore
+    requestOptions,
+  )
     .then(response => response.json())
     .then(result => {
       return result;
     });
+
+  return result;
 };

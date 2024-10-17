@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -25,7 +26,6 @@ const HomePage = (props: Props) => {
     setIsNotAPlant(null);
     try {
       const response = await GetInformationFormImage(file);
-
       const text =
         response?.data?.response?.candidates[0]?.content?.parts[0].text || '{}';
 
@@ -40,6 +40,9 @@ const HomePage = (props: Props) => {
       }
     } catch (error) {
       console.log(error);
+      setIsNotAPlant('Error!! Please try again with a clear image');
+      ToastAndroid.show('Error!! Please try again with a clear image', 1000);
+      setLoading(false);
     }
   };
   const uploadHandler = async () => {
@@ -55,6 +58,7 @@ const HomePage = (props: Props) => {
       }
     } catch (error) {
       console.log(error);
+      ToastAndroid.show('Error! Please try again', 1000);
     }
   };
   const cameraHandler = async () => {
@@ -70,6 +74,7 @@ const HomePage = (props: Props) => {
       }
     } catch (error) {
       console.log(error);
+      ToastAndroid.show('Error! Please try again', 1000);
     }
   };
   return (
