@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Colors, ScreenHeight, ScreenWidth, Size} from '../utils/Utils';
+import {Size} from '../utils/Utils';
 import CustomBottom from '../components/CustomBottom';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetInformationFormImage} from '../apis/AIInformation';
@@ -117,6 +117,7 @@ const HomePage = (props: Props) => {
           />
         </View>
       )}
+
       {loading && <ActivityIndicator size={30} />}
       {isNotAPlant && (
         <Text
@@ -144,6 +145,11 @@ const HomePage = (props: Props) => {
             {imageInfo[item]}
           </Text>
         ))}
+      {imageInfo && (
+        <View style={{alignSelf: 'center'}}>
+          <AdsScreen />
+        </View>
+      )}
     </ScrollView>
   );
 };
