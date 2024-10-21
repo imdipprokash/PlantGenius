@@ -7,12 +7,35 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Size} from '../utils/Utils';
 import CustomBottom from '../components/CustomBottom';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {GetInformationFormImage} from '../apis/AIInformation';
 import AdsScreen from '../Ads/AdsScreen';
+
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__
+  ? TestIds.REWARDED
+  : 'ca-app-pub-3346761957556908/6676712344';
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  keywords: [
+    'insurance',
+    'mortgage',
+    'investment',
+    'credit card',
+    'lawyer',
+    'online degree',
+    'crypto',
+    'enterprise software',
+  ],
+});
+
 type Props = {};
 
 const HomePage = (props: Props) => {
@@ -21,15 +44,48 @@ const HomePage = (props: Props) => {
   const [imageInfo, setImageInfo] = useState<any>();
   const [isNotAPlant, setIsNotAPlant] = useState<any>();
 
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      },
+    );
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        console.log('User earned reward of ', reward);
+      },
+    );
+
+    // Start loading the rewarded ad straight away
+    rewarded.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
+  // No advert ready to show yet
+
   const GetPlantInfoHandler = async (file: any) => {
     setImageInfo(null);
     setIsNotAPlant(null);
+
+    if (!loaded) {
+      rewarded.show();
+    }
     try {
       const response = await GetInformationFormImage(file);
       const text =
         response?.data?.response?.candidates[0]?.content?.parts[0].text || '{}';
 
       const cleanedString = text.replace(/```json|```/g, '').trim();
+
       try {
         const jsonObject = JSON.parse(cleanedString);
         setImageInfo(jsonObject);
@@ -101,9 +157,7 @@ const HomePage = (props: Props) => {
           onPress={cameraHandler}
         />
       </View>
-      <View style={{alignSelf: 'center'}}>
-        <AdsScreen />
-      </View>
+
       {image && (
         <View>
           <Image
@@ -120,6 +174,9 @@ const HomePage = (props: Props) => {
               alignSelf: 'center',
             }}
           />
+          <View style={{alignSelf: 'center', marginTop: 10}}>
+            <AdsScreen />
+          </View>
         </View>
       )}
 

@@ -13,7 +13,7 @@ type Props = {
 const AdsScreen = ({ADS_ID}: Props) => {
   const adUnitId = __DEV__
     ? TestIds.BANNER
-    : 'ca-app-pub-3346761957556908/6898300163';
+    : 'ca-app-pub-3346761957556908/5379108395';
   return (
     <GAMBannerAd
       unitId={adUnitId}
